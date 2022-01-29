@@ -1,7 +1,7 @@
 from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister
 import numpy as np
 
-def encode_psi(circ, theta=0):
+def encode_psi(circ, theta=0, reset=True):
     """Encode the logical state |psi(theta)> on a quantum circuit qc,
     where |psi> = 0.5*( (1+e^{i\theta})|0> + (1-e^{i\theta})|1> )
     
@@ -12,14 +12,18 @@ def encode_psi(circ, theta=0):
         qiskit quantum circuit
     theta : float
         Angle of rotation along z
+    reset : bool, optional
+        Flag to apply the reset. If True apply them. Default to True.
     """
     creg = ClassicalRegister(1, 'initialization')
     circ.add_register(creg)
-    for ii in range(5):
-        circ.reset(ii)
+    
+    if reset:
+        for ii in range(5):
+            circ.reset(ii)
 
     circ.h(2)
-    circ.rz(theta)
+    circ.rz(theta, 2)
     circ.h(2)
     for ii in range(5):
         if ii==2:
@@ -88,12 +92,12 @@ def decode_outputs(counts):
         
         if results[0] in occurrences:
             occurrences[ results[0]] += counts[key]
-            for _ in counts[key]:
+            for _ in range(counts[key]):
                 error_path[ results[0]].append( ' '.join(results[1:-1][::-1]) )
         else:
             occurrences[ results[0]] = counts[key]
             error_path[ results[0]] = [ ' '.join(results[1:-1][::-1]) ]
-            for _ in counts[key]-1:
+            for _ in range(counts[key]-1):
                 error_path[ results[0]].append( ' '.join(results[1:-1][::-1]) )
 
     for key in error_path:
