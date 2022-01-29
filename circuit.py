@@ -60,3 +60,44 @@ def apply_check(circ, check_num):
     circ.cx(ctrls[2], 2)
     circ.measure(2, creg[1])
 
+def decode_outputs(counts):
+    """
+    Pass from qiskit standard output to the required format,
+    which means two dictionaries that uses as key the final
+    measured state:
+    - occurrences, with the number of measurements as value
+    - syndromes, with a tuple (number of meas, syndrome) as value
+
+    Parameters
+    ----------
+    counts : dict
+        qiskit output dictionary from get_counts
+
+    Returns
+    occurrences : dict
+        Key is measured final state, value is number of occurrences
+    syndromes : dict
+        Key is measured final state, value is tuple 
+        (number of meas, syndrome)
+    """
+    occurrences = {}
+    error_path = {}
+    syndromes = {}
+    for key in counts:
+        results = key.split(' ')
+        
+        if results[0] in occurrences:
+            occurrences[ results[0]] += counts[key]
+            for _ in counts[key]:
+                error_path[ results[0]].append( ' '.join(results[1:-1][::-1]) )
+        else:
+            occurrences[ results[0]] = counts[key]
+            error_path[ results[0]] = [ ' '.join(results[1:-1][::-1]) ]
+            for _ in counts[key]-1:
+                error_path[ results[0]].append( ' '.join(results[1:-1][::-1]) )
+
+    for key in error_path:
+        unique, uni_counts = np.unique(error_path[key], return_counts=True )
+        syndromes[key] = [ (unique[ii], uni_counts[ii]) for ii in range(len(unique)) ]
+
+    return occurrences, syndromes
