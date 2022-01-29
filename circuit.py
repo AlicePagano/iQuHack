@@ -1,19 +1,25 @@
 from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister
 import numpy as np
 
-def encode_0(circ):
-    """Encode the logical 0 on a quantum circuit qc
+def encode_psi(circ, theta=0):
+    """Encode the logical state |psi(theta)> on a quantum circuit qc,
+    where |psi> = 0.5*( (1+e^{i\theta})|0> + (1-e^{i\theta})|1> )
+    
 
     Parameters
     ----------
     circ : QuantumCircuit
         qiskit quantum circuit
+    theta : float
+        Angle of rotation along z
     """
     creg = ClassicalRegister(1, 'initialization')
     circ.add_register(creg)
     for ii in range(5):
         circ.reset(ii)
 
+    circ.h(2)
+    circ.rz(theta)
     circ.h(2)
     for ii in range(5):
         if ii==2:
