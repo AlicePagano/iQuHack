@@ -7,14 +7,17 @@ import os
 if not os.path.exists('data/'):
     os.makedirs('data/')
 
-num_reps = 20
+num_reps = 8
+num_theta = 200
 
-theta_range = np.linspace(0,2*np.pi,200,endpoint=False)
+theta = np.linspace(0,2*np.pi,num_theta,endpoint=False)
+all_data = []
 
-for theta in theta_range:
+for tt in range(num_theta):
 
+    print('Counter:', tt)
     qc = QuantumCircuit(5)
-    encode_psi(qc, theta=theta)
+    encode_psi(qc, theta=theta[tt])
 
     for ii in range(num_reps):
         apply_check(qc, ii)
@@ -22,15 +25,8 @@ for theta in theta_range:
     qc.measure_all()
 
     job = execute(qc, backend=backend, basis_gates=basis_set, coupling_map=coupling, shots=1024)
-
-
     counts = job.result().get_counts()
-
     occurrences, syndromes = decode_outputs(counts)
+    all_data.append({'theta': theta[tt], 'syndromes': syndromes})
 
-    #for key in occurrences:
-    #    print(key, occurrences[key])
-    #    print(key, syndromes[key])
-        
-    file_name = 'data/theta='+str(np.round(theta,3))+'.npy'
-    np.save(file_name, np.array(syndromes)) 
+np.save('data/data_num_reps=8.npy', np.array(all_data) )
