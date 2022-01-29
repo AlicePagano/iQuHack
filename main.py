@@ -1,7 +1,7 @@
 from circuit import apply_check, encode_psi, decode_outputs
 from backend import backend, basis_set, coupling
 from qiskit import QuantumCircuit, execute
-
+import numpy as np
 
 num_reps = 5
 qc = QuantumCircuit(5)
@@ -23,3 +23,4 @@ for key in occurrences:
     print(key, occurrences[key])
     print(key, syndromes[key])
     
+np.save('data.npy', syndromes) 
