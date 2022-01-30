@@ -1,2 +1,0 @@
-# iQuHack
-MIT Hackaton
