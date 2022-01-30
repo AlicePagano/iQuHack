@@ -137,6 +137,12 @@ $$
 $$
 which basically is $1$ if the number of $x_i=1$ is odd and $0$ otherwise.
 
+Furthermore, we apply another (brutal) post-processing to the state. We know that the correct states are $|0000\rangle$ and $|1111\rangle$, each measured with a given probability. This means that all the other states are noise. We define so a distance $d_B$ between two binary string $\vec{x}, \vec{y}$ as:
+$$
+d_B=\sum_{i} |x_i-y_i|
+$$
+For each state we compute the distance to $0000$ and $1111$, and assign its occurrences to the logical state with minor distance.
+
 ## Aaand... the results! <a name="results"></a>
 
 
