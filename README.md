@@ -178,6 +178,9 @@ The tough part arrives when we compute the accuracy on the test set: the outcome
 
 As we notice, all the approaches give comparable results, we do not see any significative difference between the counts. The state still displays an high fidelity with the expected output, even if we apply several layers of measurements that should make the execution time approach the relaxation time $T_1$  of the simulator.
 
+### Extra beeps
+With `circuit_animation/circuit_music.py` you can make python play a nice jingle. Eventually you could relate the "NOISE" to the actual measured circuit errors.
+
 ### Link to the presentation <a name="pres_link"></a>
 The presentation can be found [here](presentation.pdf).
 
