@@ -7,6 +7,8 @@ Here we report the topology of stardom:
 <img src="images/stardom.png" alt="drawing" width="100"/>
 </p>
 
+**Team members**: Marco Ballarin, Alice Pagano, Marco Trenti
+
 # Table of contents
 1. [How the carousel works](#carousel)
 2. [The quantum math behind the carousel](#math)
@@ -16,6 +18,9 @@ Here we report the topology of stardom:
     1. [Dataset generation](#data_generation)
     2. [Machine learning model](#mlmodel)
     3. [Classical postprocessing](#clpostprocess)
+4. [Aaand... the results!](#results)
+    1. [Link to the presentation](#pres_link)
+    2. [Personal experience? A carousel riding!](#exp)
 
 ## How the carousel works <a name="carousel"></a>
 
@@ -110,7 +115,29 @@ We present below an example of such matrix where an error occurred at timestep $
 | $q_3$ | $0$   | $0$   | $1$   | $0$   |
 
 ### Dataset generation  <a name="data_generation"></a>
+The generation of the dataset is a bit tricky. We cannot use real-device or simulator data, since in both cases we wouldn't have access to the error landscape, but only to the parity checks. For this reason, we prepare the dataset using a *correct* simulation where, before each parity check, we apply an $X=\begin{pmatrix}0 & 1 \\ 1 & 0\end{pmatrix}$ gate independently to each qubit with a probability $p$. In this way we have access to the full error landscape, that we can use as target state in our machine learning task. We select $p=10^{-2}$.
+The learning procedure is however very though with the type of data we have available. We so preprocess the data, transforming each parity check measure in a number in $\{0, 1, 2, 3\}$ and the error landscape by "collapsing" each column into the qubit error index $+1$. If no error occur, then the value is $0$. For example, if an error occur on $q_1$ then the value will be $1+1=2$. We report the example of the error landscape of the previous section in the new form:
+| $t_0$ | $t_1$ | $t_2$ | $t_3$ |
+|-------|-------|-------|-------|
+| $0$   | $0$   | $4$   | $1$   |
 
 ### Machine learning model <a name="mlmodel"></a>
 
 ### Classical postprocessing <a name="clpostprocess"></a>
+Given the error landscape we must be able to postprocess the data. This (at least) is very simple!
+It is sufficient to compute the classical parity $\mathcal{P}$ of each row of the error landscape, and if the value is $1$ we flip the corresponding bit (if column $0$ has $\mathcal{P}=1$ then flip the value of $q_0$). We recall for completeness the definition of classical parity of a bit-string $\vec{x} = x_0x_1\dots x_n$:
+$$
+\mathcal{P}(\vec{x})=\left(\sum_ix_i\right)\%2
+$$
+which basically is $1$ if the number of $x_i=1$ is odd and $0$ otherwise.
+
+## Aaand... the results! <a name="results"></a>
+
+
+### Link to the presentation <a name="pres_link"></a>
+The presentation can be found [here]().
+
+### Personal experience? A carousel riding! <a name="exp"></a>
+- **marcob** says:
+- **alice** says:
+- **marcot** says:
