@@ -1,6 +1,6 @@
 # Spinning carousel quantum memory
 
-The aim of this project is to reproduce a quantum memory on the $5$-qubit QuTech device stardom. However, the approach we decided to follow is not implementable in the real hardware at the moment, since it requires intermediate measurement. We so decided to simulate the device specific using qiskit density matrix simulator.
+Our goal is to reproduce a quantum memory on the $5$-qubit QuTech device stardom. However, the approach we decided to follow is not implementable in the hardware at the moment since it requires intermediate measurement. We so decided to simulate the device-specific using qiskit density matrix simulator.
 The work is inspired by [this paper](https://www.nature.com/articles/nature14270) and [this other paper](https://arxiv.org/pdf/2102.06132.pdf). However, they missed the flow of the music!
 Here we report the topology of stardom:
 <p align="center">
@@ -30,16 +30,17 @@ Here we report the topology of stardom:
 
 Do you remember those old festivals in which you would mount your fiery horse, and spin around while your parents were watching you? Well, here we go again (but quantum)!
 We have four mighty horses.
-Each time you buy a ticket you and your friends can mount up to three horses, and after each time you switch horse. Just to make sure you don't hurt the horses' feelings. So, the pattern of the ridden horses is:
-1. $0,1,2$
-2. $1,2,3$
-3. $2,3,1$
-4. $3,1,0$
+Each time you buy a ticket you and your friends can mount up to three horses, and after each ride you must switch horse. Just to make sure you don't hurt the horses' feelings. So, the pattern of the ridden horses is:
+- $0,1,2$
+- $1,2,3$
+- $2,3,1$
+- $3,1,0$
 
-At the end of each ride the occupied horses make a neighing. The one ridden in the middle actually makes two neighings! You know, first he answers the horse in front of him, and then the horse behind him. The free horse instead stays silent.
+At the end of each ride the occupied horses neigh. The one ridden in the middle actually makes two neighings! You know, first he answers the horse in front of him, and then the horse behind him. The free horse instead remains silent.
 
-To me and you, all the horse noises seams the same. Really the same! But not to Bob, our *Parity checker* (yes, parity checker is a specific horce racing term). He knows how to talk with horses, and by hearing a couple of neighings (those after a single ride) he is able to understand if one of the horses is in distress! However, Bob cannot stop the carousel. He will write down who is in distress, and give him an extra carrot that evening!
-Furthermore, by keeping one of the horses silent Bob is always able to understand who is in distress! While it would be a mess to hear from all the horses.
+To me and you, all the horse noises seams the same. Really the same! But not to Bob, our *Parity checker* (yes, parity checker is a specific horce-racing term). He knows how to speak with horses, and by hearing two couple of neighings (first+second, second+third) he is able to understand if one of the horses is in distress! However, Bob cannot stop the carousel. He will write down who is in distress, and give him an extra carrot that evening!
+Furthermore, by keeping one of the horses silent Bob is always able to understand who is in distress! It would be a mess to hear from all the horses at once. In particular, he would not be able to understand which horses are in distress if there are at least two.
+
 Bob is good at understanding horses. But he is simple-minded, he need the help of his friend Agent to decode the pattern and understand who and how many carrots are needed!
 
 So, what happens in a given ride is ($i$ is defined module 4):
@@ -62,7 +63,7 @@ The project workflow is the following:
     in the device, using $4$ physical qubits
 - Measure repeatedly the state of the inner qubit, performing parity checks on 3 of the logical qubits. The set of three physical qubits spin around
 - Save every measure that occurred during the simulation.
-- Use a machine learning model to infer $\theta$ after as much time as possible
+- Use a machine learning model to infer what happened and which are the needed actions to restore the correct state
 - listen to fancy quasi-quantum music!
 
 ### Preparing the carousel: the encoding  <a name="encoding"></a>
@@ -80,6 +81,7 @@ Then we apply the parity checks, also called syndrome detection. We treat it as 
 2. $q_1 q_3$, $q_3 q_4$.
 3. $q_3 q_4$, $q_4 q_0$.
 4. $q_4 q_0$, $q_0 q_1$.
+
 This spinning version of the $(3+1)$-qubit code increase our ability to correct the system with respect to a trivial $4$-qubit code. Indeed, we use only $3$ qubits at a given step. In that step, we may recognise an error BUT if a second error occurs in the $4^{th}$ qubit, even at the same time of the previous error, the new problem can be recognized in the next step! We are then able to correct up to $2$ errors instead of $1$, if the extra error occurs where we are not watching!
 Below we report the table for the syndromes. The value 'n.a.' denotes a parity check that is not performed.
 
