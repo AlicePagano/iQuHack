@@ -36,10 +36,10 @@ noise_model = noise.NoiseModel()
 depolarizing_prob = 0.001
 depolarizing_prob2 = 0.002
 
-noise_model.add_all_qubit_quantum_error(
-    noise.depolarizing_error(depolarizing_prob, 1),
-    ['x', 'y', 'id', 'rx', 'ry', 'rz']
-)
+#noise_model.add_all_qubit_quantum_error(
+#    noise.depolarizing_error(depolarizing_prob, 1),
+#    ['x', 'y', 'id', 'rx', 'ry', 'rz']
+#)
 noise_model.add_all_qubit_quantum_error(
     noise.depolarizing_error(depolarizing_prob2, 2),
     ['cz']
@@ -49,7 +49,7 @@ noise_model.add_all_qubit_quantum_error(
 for ii in range(5):
     # Add phase and amplitude damping channel for single-qubit gates
     noise_model.add_quantum_error( 
-        thermal_relaxation_error(t1s[ii], t2s[ii], t_1q),
+        thermal_relaxation_error(t1s[ii], t2s[ii], t_1q).compose(noise.depolarizing_error(depolarizing_prob, 1)) ,
         ['x', 'y', 'id', 'rx', 'ry', 'rz'],
         [ii]
     )
