@@ -121,7 +121,7 @@ The learning procedure is however very though with the type of data we have avai
 |-------|-------|-------|-------|
 | $0$   | $0$   | $4$   | $1$   |
 
-### Machine learning model <a name="mlmodel"></a>
+### Machine learning model: neural network <a name="mlmodel"></a>
 
 ### Classical postprocessing <a name="clpostprocess"></a>
 Given the error landscape we must be able to postprocess the data. This (at least) is very simple!
@@ -138,6 +138,6 @@ which basically is $1$ if the number of $x_i=1$ is odd and $0$ otherwise.
 The presentation can be found [here]().
 
 ### Personal experience? A carousel riding! <a name="exp"></a>
-- **marcob** says:
+- **marcob** says: It was a very exciting experience! I'm settled in Italy, and so have a 6 hour lag w.r.t. ET timezone. However, the sheer excitment and the desire to overcome the challange let me continue to work until 3 am, and wake up at 7! I'm a PhD and I'm currently working on QECC, so the QuTech challange was really perfect for me. It was not trivial at all to come up with an interesting idea, but it was definitly fun! Btw, it was also my first hackaton ever.
 - **alice** says:
 - **marcot** says:
