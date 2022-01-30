@@ -25,7 +25,7 @@ Here we report the topology of stardom:
 ## How the carousel works <a name="carousel"></a>
 
 <p align="center">
-<img src="images/spinning_carousel.jpg" alt="drawing" width="300"/>
+<img src="images/carousel.gif" alt="drawing" width="300"/>
 </p>
 
 Do you remember those old festivals in which you would mount your fiery horse, and spin around while your parents were watching you? Well, here we go again (but quantum)!
