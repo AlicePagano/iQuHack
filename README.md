@@ -125,6 +125,10 @@ The learning procedure is however very though with the type of data we have avai
 
 ### Machine learning model: neural network <a name="mlmodel"></a>
 
+<p align="center">
+<img src="images/nn.svg" alt="drawing" width="1500"/>
+</p>
+
 ### Classical postprocessing <a name="clpostprocess"></a>
 Given the error landscape we must be able to postprocess the data. This (at least) is very simple!
 It is sufficient to compute the classical parity $\mathcal{P}$ of each row of the error landscape, and if the value is $1$ we flip the corresponding bit (if column $0$ has $\mathcal{P}=1$ then flip the value of $q_0$). We recall for completeness the definition of classical parity of a bit-string $\vec{x} = x_0x_1\dots x_n$:
