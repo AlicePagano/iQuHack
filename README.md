@@ -129,6 +129,20 @@ The learning procedure is however very though with the type of data we have avai
 <img src="images/nn.png" alt="drawing" width="1000"/>
 </p>
 
+To tackle the problem we use a deep feedforward neural network, built with the tensorflow package. The image above is a faithful representation of the model used. We report here all the specifics:
+
+ | Layer (type)    |   Output Shape  | Param |  
+ |-----------------|-----------------|-------|
+ normalization     | (None, 10)      |  21   |
+ dense (Dense)     | (None, 64)      |  704  |
+ dense_1 (Dense)   | (None, 20)      |  1300 |
+ dense_2 (Dense)   | (None, 10)      |  210  |
+ dense_3 (Dense)   | (None, 10)      |  110  |
+
+We recall that in tensorflow language a dense layer is a fully connected layers of artificial neurons. In the [example](example.ipynb) we show a possible set of hyperparameters and the training procedure.
+
+We think that a naive feedforward neural network is not the best architecture to analyze our data. The input data re a time-series, where each value actually depend from the previous one, and the target state is also a time-series. This data structure suggests that the most suitable architecture should be recurrent neural network, for example LSTM (Long Short Term Memory). However, these models are much more complex than the feedforward networks. For this reason we decided to leave the exploration of RNN for further studies.
+
 ### Classical postprocessing <a name="clpostprocess"></a>
 Given the error landscape we must be able to postprocess the data. This (at least) is very simple!
 It is sufficient to compute the classical parity $\mathcal{P}$ of each row of the error landscape, and if the value is $1$ we flip the corresponding bit (if column $0$ has $\mathcal{P}=1$ then flip the value of $q_0$). We recall for completeness the definition of classical parity of a bit-string $\vec{x} = x_0x_1\dots x_n$:
@@ -136,6 +150,12 @@ $$
 \mathcal{P}(\vec{x})=\left(\sum_ix_i\right)\%2
 $$
 which basically is $1$ if the number of $x_i=1$ is odd and $0$ otherwise.
+
+Furthermore, we apply another (brutal) post-processing to the state. We know that the correct states are $|0000\rangle$ and $|1111\rangle$, each measured with a given probability. This means that all the other states are noise. We define so a distance $d_B$ between two binary string $\vec{x}, \vec{y}$ as:
+$$
+d_B=\sum_{i} |x_i-y_i|
+$$
+For each state we compute the distance to $0000$ and $1111$, and assign its occurrences to the logical state with minor distance.
 
 ## Aaand... the results! <a name="results"></a>
 
