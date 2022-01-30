@@ -7,7 +7,17 @@ Here we report the topology of stardom:
 <img src="images/stardom.png" alt="drawing" width="100"/>
 </p>
 
-## How the carousel works 
+# Table of contents
+1. [How the carousel works](#carousel)
+2. [The quantum math behind the carousel](#math)
+    1. [Preparing the carousel: the encoding](#encoding)
+    2. [Listen to the horses: the parity checks](#parity_checks)
+3. [Decoding the sequence: machine learning agent](#mlagent)
+    1. [Dataset generation](#data_generation)
+    2. [Machine learning model](#mlmodel)
+    3. [Classical postprocessing](#clpostprocess)
+
+## How the carousel works <a name="carousel"></a>
 
 <p align="center">
 <img src="images/spinning_carousel.jpg" alt="drawing" width="300"/>
@@ -40,7 +50,7 @@ At the end of the day, Agent decodes the (OK, NOT OK) sequence, and distribute t
 
 **NOTICE**: no horses were hurted in this process
 
-## The quantum math behind the carousel
+## The quantum math behind the carousel  <a name="math"></a>
 The project workflow is the following:
 - Encode a general state 
     $$|\psi\rangle= \frac{1}{2}\big[ (1+e^{i\theta})|0\rangle + (1-e^{i\theta}|1\rangle \big]$$ 
@@ -50,7 +60,7 @@ The project workflow is the following:
 - Use a machine learning model to infer $\theta$ after as much time as possible
 - listen to fancy quasi-quantum music!
 
-### Preparing the carousel: the encoding
+### Preparing the carousel: the encoding  <a name="encoding"></a>
 We encode, as an example, the state:
 $$|\psi\rangle= \frac{1}{\sqrt{2}}\big[ |0\rangle -i |1\rangle \big]$$ 
 into the state 
@@ -59,7 +69,7 @@ in which $s\in\{0, 1\}$ is not important after the encoding. Below we show the e
 
 ![Encoding](images/encoding.png "Encoding")
 
-### Listen to the horses: the parity checks
+### Listen to the horses: the parity checks  <a name="parity_checks"></a>
 Then we apply the parity checks, also called syndrome detection. We treat it as a "spinning" $3$ qubit code. This means that the parity checks, at a given step, will be on:
 1. $q_0 q_1$, $q_1 q_3$.
 2. $q_1 q_3$, $q_3 q_4$.
@@ -88,4 +98,19 @@ It may seem a little strange, but the figure will clarify it!
 
 However, we stress that we don't do any classically controlled operation to update the results. It will be our machine learning model that, given the error pattern, will understand the correct **classical** post-processing!
 
-### Decoding the sequence: machine learning agent
+## Decoding the sequence: machine learning agent  <a name="mlagent"></a>
+To apply the machine learning model, first of all we have to define a task the ML model can understand and tackle. So, our task is to deduce the **error landscape** given the series of parity check measurements.
+We define as error landscape a matrix with the qubit index on the rows ($y$ axis) and the time on the column ($x$ axis). Each time step is composed of the application of a single repetition of the parity check. The entries of the matrix are $0$ if no error occur, and $1$ if an error occur. 
+We present below an example of such matrix where an error occurred at timestep $t_2$ on qubit $3$ and on timestep $t_3$ on qubit $0$:
+| Qubit | $t_0$ | $t_1$ | $t_2$ | $t_3$ |
+|-------|-------|-------|-------|-------|
+| $q_0$ | $0$   | $0$   | $0$   | $1$   |
+| $q_1$ | $0$   | $0$   | $0$   | $0$   |
+| $q_2$ | $0$   | $0$   | $0$   | $0$   |
+| $q_3$ | $0$   | $0$   | $1$   | $0$   |
+
+### Dataset generation  <a name="data_generation"></a>
+
+### Machine learning model <a name="mlmodel"></a>
+
+### Classical postprocessing <a name="clpostprocess"></a>
