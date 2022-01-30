@@ -6,6 +6,8 @@ from qiskit import QuantumCircuit, execute, ClassicalRegister
 import numpy as np
 from tensorflow import keras
 import os
+from qiskit.visualization import plot_histogram
+import matplotlib.pyplot as plt
 
 if not os.path.exists('data/'):
     os.makedirs('data/')
@@ -14,18 +16,21 @@ if not os.path.exists('data/'):
 model = keras.models.load_model("dnn_predictor.krs")
 
 # Define theta range
-num_theta = 1
+num_theta = 10
 thetas = np.linspace(0, np.pi,num_theta,endpoint=False)
 
 
 # Number of error-correcting block repetition
-num_reps = 8
+num_reps = 10
 
 all_data = []
 for tt, theta in enumerate(thetas):
     print('Angle:', theta)
     print('Correct state:')
-    print_state( np.array([(1+np.exp(1j*theta)),  (1+np.exp(1j*theta))])/2 )
+    psi = np.array([(1+np.exp(1j*theta)),  (1-np.exp(1j*theta))])
+    psi /= np.sqrt(np.vdot(psi, psi ))
+    print_state( psi )
+    print('Correct_probs :', np.real(psi[0]*np.conj(psi[0])) )
 
     syndromes_list = []
     qc = QuantumCircuit(5)
@@ -48,13 +53,67 @@ for tt, theta in enumerate(thetas):
     occurrences, syndromes = decode_outputs(counts)
 
     # Apply ml model on results
+    corrected_occurrences = {}
     for meas_state in syndromes:
         for syndrome, n_occ in syndromes[meas_state]:
-            print(syndrome, n_occ)
-            error_landscape = model()
-    #for ii in occurrences:
-    #    print(ii, occurrences[ii])
-    
-    # Correct occurrences
-    
-    # Save results
+            if syndrome in ( ('00 '*10)[:-1], ('11 '*10)[:-1] ):
+                corrected_state = meas_state
+            else:
+                error_landscape = dnn_predict(model, [syndrome])[0]
+                
+                # Check if you have to apply a bitflip and where
+                yes_no = error_landscape.sum(axis=1)%2
+
+                corrected_state = np.array([ int(ii) for ii in meas_state ], dtype=int)
+                for ii, val in enumerate(yes_no):
+                    if val==1:
+                        if corrected_state[ii]==0:
+                            corrected_state[ii] = 1
+                        else:
+                            corrected_state[ii] = 0
+                    
+                corrected_state = ''.join( corrected_state.astype(str) )
+            
+            if corrected_state in corrected_occurrences:
+                corrected_occurrences[corrected_state] += n_occ
+            else:
+                 corrected_occurrences[corrected_state] = n_occ
+
+    # post-post processing
+    true_keys = np.array( [[0]*4, [1]*4])
+    true_occ = {'0000':0, '1111': 0}
+    for key in corrected_occurrences:
+        key_vect = np.array( [int(ii) for ii in key] )
+        
+        distances = []
+        for tk in true_keys:
+            distance = np.sum(np.abs( tk- key_vect) )
+            distances.append(distance)
+
+        if distances[0] < distances[1]:
+            true_occ['0000'] += corrected_occurrences[key]
+        else:
+            true_occ['1111'] += corrected_occurrences[key]
+
+    # post-post processing
+    true_occ_ori = {'0000':0, '1111': 0}
+    for key in occurrences:
+        key_vect = np.array( [int(ii) for ii in key] )
+        
+        distances = []
+        for tk in true_keys:
+            distance = np.sum(np.abs( tk- key_vect) )
+            distances.append(distance)
+
+        if distances[0] < distances[1]:
+            true_occ_ori['0000'] += occurrences[key]
+        else:
+            true_occ_ori['1111'] += occurrences[key]
+
+
+
+    plot_histogram([occurrences, corrected_occurrences, true_occ_ori, true_occ], figsize=(12, 6),
+        legend=['Measured', 'Corrected', 'Corrected from measured', 'Double corrected'])
+
+    plt.tight_layout()
+    plt.show()
