@@ -30,7 +30,8 @@ for tt, theta in enumerate(thetas):
     psi = np.array([(1+np.exp(1j*theta)),  (1-np.exp(1j*theta))])
     psi /= np.sqrt(np.vdot(psi, psi ))
     print_state( psi )
-    print('Correct_probs :', np.real(psi[0]*np.conj(psi[0])) )
+    prob0 = np.real(psi[0]*np.conj(psi[0])) 
+    print('Correct_probs :', prob0 )
 
     syndromes_list = []
     qc = QuantumCircuit(5)
@@ -113,7 +114,9 @@ for tt, theta in enumerate(thetas):
 
 
     plot_histogram([occurrences, corrected_occurrences, true_occ_ori, true_occ], figsize=(12, 6),
-        legend=['Measured', 'Corrected', 'Corrected from measured', 'Double corrected'])
+        legend=['Measured', 'ML-corrected', 'Measured+distance', 'ML-corrected + distance'])
+    plt.text(5, 0.57, '$p_{|0\\rangle}$ = '+str(np.round(prob0, 2)), fontsize=16 )
 
     plt.tight_layout()
+    #plt.savefig('images/histo.png')
     plt.show()

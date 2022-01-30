@@ -158,12 +158,31 @@ $$
 For each state we compute the distance to $0000$ and $1111$, and assign its occurrences to the logical state with minor distance.
 
 ## Aaand... the results! <a name="results"></a>
+We finally arrived at the end of this journey. First, we can show that the machine learning agent is able to correct (sometimes) the errors that occurs. The loss function of the optimization is shown below:
 
+<p align="center">
+<img src="images/dnn_loss.png" alt="drawing"/>
+</p>
+
+As we see, the network is able to learn something from the dataset. However, given the behaviour of the training loss (which is smaller than the validation) we can expect some overfitting.
+
+The tough part arrives when we compute the accuracy on the test set: the outcome is between $15\%$ and $25\%$. The net is not able to fully recognize the error patterns. The problem is that the training set is a simple approximation of the simulator noise model, which is an approximation of the hardware noise. That is, we are not very faithful in good results when we apply this correction procedure on the simulator. Indeed, we show here the results for an initial state $|\psi\rangle=\frac{1}{\sqrt{2}}(|0\rangle - i |1\rangle)$. As it is also written in the figure, the probability of measuring the state $|0\rangle$ is $p_{|0\rangle}=0$. We denote with:
+- Measured, the measured shot without any postprocessing;
+- ML-corrected, the measurement results after the application of our ML agent
+- Measured+distance, the measured shots where it is applied the postprocessing with the distance defined in the above sections
+- ML-corrected+distance, the measured shots where we apply both the ML correction and the distance correction.
+
+<p align="center">
+<img src="images/histo.png" alt="drawing"/>
+</p>
+
+As we notice, all the approaches give comparable results, we do not see any significative difference between the counts. The state still displays an high fidelity with the expected output, even if we apply several layers of measurements that should make the execution time approach the relaxation time $T_1$  of the simulator.
 
 ### Link to the presentation <a name="pres_link"></a>
-The presentation can be found [here]().
+The presentation can be found [here](presentation.pdf).
 
 ### Personal experience? A carousel riding! <a name="exp"></a>
 - **marcob** says: It was a very exciting experience! I'm settled in Italy, and so have a 6 hour lag w.r.t. ET timezone. However, the sheer excitment and the desire to overcome the challange let me continue to work until 3 am, and wake up at 7! I'm a PhD and I'm currently working on QECC, so the QuTech challange was really perfect for me. It was not trivial at all to come up with an interesting idea, but it was definitly fun! Btw, it was also my first hackaton ever.
-- **alice** says:
-- **marcot** says:
+- **alice** says: It was really fun! This is the first time I partecipate in a hackaton and I really enjoyed this experience! I think that the challenge was hard, but we worked in complete synergy  to develop our best idea and to have also a lot of fun!
+- **marcot** says: Participating in the iQuHack hackathon was a really enjoyable opportunity. I came in without any previous knowledge about Quantum Computing and, as some sort of Hadamard applied to my knowledge, now my understanding of Quantum Computing is in a superposition between |know nothing> and |know everything>, challenge like these provides the perfect measurement! 
+I felt that the time was a bit strict for the Q-error correction challenge but “Oh, I get by with a little help from my friend”ly and expert teammates. 
