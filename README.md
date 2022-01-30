@@ -126,7 +126,7 @@ The learning procedure is however very though with the type of data we have avai
 ### Machine learning model: neural network <a name="mlmodel"></a>
 
 <p align="center">
-<img src="images/nn.svg" alt="drawing" width="1500"/>
+<img src="images/nn.png" alt="drawing" width="1000"/>
 </p>
 
 ### Classical postprocessing <a name="clpostprocess"></a>
