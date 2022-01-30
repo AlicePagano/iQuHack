@@ -183,6 +183,6 @@ The presentation can be found [here](presentation.pdf).
 
 ### Personal experience? A carousel riding! <a name="exp"></a>
 - **marcob** says: It was a very exciting experience! I'm settled in Italy, and so have a 6 hour lag w.r.t. ET timezone. However, the sheer excitment and the desire to overcome the challange let me continue to work until 3 am, and wake up at 7! I'm a PhD and I'm currently working on QECC, so the QuTech challange was really perfect for me. It was not trivial at all to come up with an interesting idea, but it was definitly fun! Btw, it was also my first hackaton ever.
-- **alice** says:
+- **alice** says: It was really fun! This is the first time I partecipate in a hackaton and I really enjoyed this experience! I think that the challenge was hard, but we worked in complete synergy  to develop our best idea and to have also a lot of fun!
 - **marcot** says: Participating in the iQuHack hackathon was a really enjoyable opportunity. I came in without any previous knowledge about Quantum Computing and, as some sort of Hadamard applied to my knowledge, now my understanding of Quantum Computing is in a superposition between |know nothing> and |know everything>, challenge like these provides the perfect measurement! 
 I felt that the time was a bit strict for the Q-error correction challenge but “Oh, I get by with a little help from my friend”ly and expert teammates. 
