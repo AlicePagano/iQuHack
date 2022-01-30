@@ -129,6 +129,20 @@ The learning procedure is however very though with the type of data we have avai
 <img src="images/nn.png" alt="drawing" width="1000"/>
 </p>
 
+To tackle the problem we use a deep feedforward neural network, built with the tensorflow package. The image above is a faithful representation of the model used. We report here all the specifics:
+
+ | Layer (type)    |   Output Shape  | Param |  
+ |-----------------|-----------------|-------|
+ normalization     | (None, 10)      |  21   |
+ dense (Dense)     | (None, 64)      |  704  |
+ dense_1 (Dense)   | (None, 20)      |  1300 |
+ dense_2 (Dense)   | (None, 10)      |  210  |
+ dense_3 (Dense)   | (None, 10)      |  110  |
+
+We recall that in tensorflow language a dense layer is a fully connected layers of artificial neurons. In the [example](example.ipynb) we show a possible set of hyperparameters and the training procedure.
+
+We think that a naive feedforward neural network is not the best architecture to analyze our data. The input data re a time-series, where each value actually depend from the previous one, and the target state is also a time-series. This data structure suggests that the most suitable architecture should be recurrent neural network, for example LSTM (Long Short Term Memory). However, these models are much more complex than the feedforward networks. For this reason we decided to leave the exploration of RNN for further studies.
+
 ### Classical postprocessing <a name="clpostprocess"></a>
 Given the error landscape we must be able to postprocess the data. This (at least) is very simple!
 It is sufficient to compute the classical parity $\mathcal{P}$ of each row of the error landscape, and if the value is $1$ we flip the corresponding bit (if column $0$ has $\mathcal{P}=1$ then flip the value of $q_0$). We recall for completeness the definition of classical parity of a bit-string $\vec{x} = x_0x_1\dots x_n$:
