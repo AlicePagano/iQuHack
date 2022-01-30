@@ -30,7 +30,7 @@ def apply_check_with_error(circ, check_num, bit_flip=True):
             circ.x(ii)
             if ii >1:
                 ii -= 1
-            print('ERROR')
+            #print('ERROR')
             stack[ii, 0] = 1
 
     creg = ClassicalRegister(2, f'check{check_num}')
@@ -78,7 +78,7 @@ num_reps = 10
 features = []
 labels = []
 
-for ii in tqdm(range(10)):
+for ii in tqdm(range(100)):
     error_map = np.zeros((4, 1))
 
     qc = QuantumCircuit(5)
@@ -100,7 +100,8 @@ for ii in tqdm(range(10)):
     counts = job.result().get_counts()
     occurrences, syndromes = decode_outputs(counts)
     features.append( list(list(syndromes.values())[0])[0] )
-    print(list(list(syndromes.values())[0])[0])
+    #print(list(list(syndromes.values())[0])[0])
 
 
-np.save('data/new_data.npy', np.array([features, labels]) )
+np.save('data/features.npy', features )
+np.save('data/labels.npy', labels )
